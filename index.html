@@ -98,7 +98,8 @@ pre{margin:0;padding:18px;font-size:12.5px;line-height:1.75;overflow-x:auto;colo
 .vid{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .25s,border-color .25s;text-align:left;padding:0;color:inherit;font:inherit;display:block;width:100%}
 .vid:hover{transform:translateY(-3px);border-color:var(--ac)}
 .thumb{aspect-ratio:16/9;position:relative;display:grid;place-items:center;background:linear-gradient(135deg,var(--h1,#1b2a66),var(--h2,#4a1d8c));overflow:hidden}
-.thumb::after{content:"Video placeholder";position:absolute;left:12px;bottom:10px;font:11px "JetBrains Mono",monospace;color:#ffffffb0}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.thumb .play{position:relative;z-index:1}
 .play{width:54px;height:38px;border-radius:11px;background:#ff2d3a;display:grid;place-items:center;transition:transform .25s}
 .vid:hover .play,.feat:hover .play{transform:scale(1.12)}
 .play::before{content:"";border-left:14px solid #fff;border-block:8px solid transparent;margin-left:3px}
@@ -108,15 +109,6 @@ pre{margin:0;padding:18px;font-size:12.5px;line-height:1.75;overflow-x:auto;colo
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chips span{font:11px "JetBrains Mono",monospace;color:var(--mu);border:1px solid var(--line);padding:2px 8px;border-radius:6px}
 .feat .thumb{height:100%;min-height:240px;aspect-ratio:auto;cursor:pointer;border:0;width:100%}
-
-/* games */
-.games{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:900px){.games{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.games{grid-template-columns:1fr}}
-.game{display:flex;flex-direction:column;gap:4px}
-.game .lg{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;margin-bottom:14px;background:linear-gradient(135deg,var(--ac),var(--ac2))}
-.game h3{font-size:16px}
-.game small{color:var(--mu);font-size:13px}
-.game .go{margin-top:14px;font-size:12px;color:var(--ac);display:flex;justify-content:space-between}
 
 /* services / process */
 .cards.four{grid-template-columns:repeat(4,1fr)}
@@ -131,6 +123,7 @@ pre{margin:0;padding:18px;font-size:12.5px;line-height:1.75;overflow-x:auto;colo
 .rows{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}
 @media(max-width:700px){.rows{grid-template-columns:1fr}}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.row>div{min-width:0}.row span{overflow-wrap:anywhere}
 .row small{display:block;font-size:11px;color:var(--mu)}
 .row button{font:12px "JetBrains Mono",monospace;background:none;border:1px solid var(--line);color:var(--mu);border-radius:7px;padding:5px 10px;cursor:pointer;transition:color .2s,border-color .2s}
 .row button:hover{color:var(--tx);border-color:var(--ac)}
@@ -156,7 +149,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 <header><div class="wrap"><nav>
   <a class="logo" href="#top"><i>V</i>Vlad</a>
   <div class="links">
-    <a href="#about">About</a><a href="#work">Work</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#services">Services</a><a class="hire" href="#contact">Hire me</a>
+    <a href="#about">About</a><a href="#work">Work</a><a href="#skills">Skills</a><a href="#services">Services</a><a class="hire" href="#contact">Hire me</a>
   </div>
 </nav></div></header>
 
@@ -206,26 +199,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 <section id="work" style="background:var(--bg2)"><div class="wrap">
   <span class="tag mono rv">Showcases</span>
   <h2 class="rv">Recorded straight from Studio.</h2>
-  <p class="lead rv">Click any thumbnail to play. Replace the empty <span class="mono">data-yt</span> values in the HTML with your YouTube video IDs.</p>
-
-  <div class="feat rv">
-    <button class="thumb" data-yt="" data-title="Featured Showcase: Combat System" aria-label="Play featured showcase"><span class="play"></span></button>
-    <div class="info">
-      <span class="tag mono" style="margin:0">Featured showcase</span>
-      <h3>Featured Project Title</h3>
-      <p>Describe your best piece of work here: what you built, what made it hard, and the result. Two or three sentences is plenty.</p>
-      <div class="chips"><span>Combat</span><span>Luau</span><span>Remotes</span></div>
-    </div>
-  </div>
+  <p class="lead rv">Click any thumbnail to play.</p>
 
   <div class="vgrid" id="vgrid"></div>
-</div></section>
-
-<section id="projects"><div class="wrap">
-  <span class="tag mono rv">Projects</span>
-  <h2 class="rv">Games and teams I’ve worked with.</h2>
-  <p class="lead rv">Real credits and real communities. Swap in your own games, roles, and group links.</p>
-  <div class="games" id="games"></div>
 </div></section>
 
 <section id="skills" style="background:var(--bg2)"><div class="wrap">
@@ -264,10 +240,10 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
     <h2>Got a project? Let’s make it real.</h2>
     <p class="lead" style="margin-bottom:0">Send me what you’re building, your rough budget, and your timeline. Discord is fastest, email works too.</p>
     <div class="rows">
-      <div class="row"><div><small class="mono">Email</small><span id="em">your@email.com</span></div><button data-copy="em">Copy</button></div>
-      <div class="row"><div><small class="mono">Discord</small><span id="dc">your_discord</span></div><button data-copy="dc">Copy</button></div>
+      <div class="row"><div><small class="mono">Email</small><span id="em">blockstrikeplayer96@gmail.com</span></div><button data-copy="em">Copy</button></div>
+      <div class="row"><div><small class="mono">Discord</small><span id="dc">https://discord.com/users/1337507708823408772</span></div><button data-copy="dc">Copy</button></div>
     </div>
-    <a class="btn p" href="mailto:your@email.com">Email me</a>
+    <div class="cta"><a class="btn p" href="mailto:blockstrikeplayer96@gmail.com">Email me</a><a class="btn" href="https://discord.com/users/1337507708823408772" target="_blank" rel="noopener">Open Discord</a></div>
   </div>
 </div></section>
 </main>
@@ -285,18 +261,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 (function(){
   // ---- Edit your content here ----
   var showcases=[
-    {t:"Combat System",d:"Short description of what this clip shows.",c:["Combat","Luau","Remotes"],yt:"",h:["#1b2a66","#4a1d8c"]},
-    {t:"Inventory and Shop",d:"Short description of what this clip shows.",c:["UI","DataStore"],yt:"",h:["#0f4c5c","#1b2a66"]},
-    {t:"Ability Framework",d:"Short description of what this clip shows.",c:["OOP","Modules"],yt:"",h:["#5c1d6b","#1b2a66"]},
-    {t:"Round and Match Loop",d:"Short description of what this clip shows.",c:["Server","Events"],yt:"",h:["#14532d","#1b2a66"]},
-    {t:"Custom Movement",d:"Short description of what this clip shows.",c:["Client","Tweening"],yt:"",h:["#7c2d12","#4a1d8c"]},
-    {t:"Admin Tools",d:"Short description of what this clip shows.",c:["Tools","Security"],yt:"",h:["#1e3a8a","#0f766e"]}
-  ];
-  var games=[
-    ["Game Name One","Combat and gameplay systems"],["Game Name Two","Data and backend scripting"],
-    ["Game Name Three","UI scripting"],["Game Name Four","Full game development"],
-    ["Game Name Five","Gameplay systems"],["Game Name Six","Bug fixes and optimization"],
-    ["Game Name Seven","Building and scripting"],["Game Name Eight","Contract scripting"]
+    {t:"Showcase 1",d:"Scripting showcase recorded in Roblox Studio.",c:["Luau","Roblox"],yt:"rewV5NVVslM",h:["#1b2a66","#4a1d8c"]},
+    {t:"Showcase 2",d:"Scripting showcase recorded in Roblox Studio.",c:["Luau","Roblox"],yt:"ADY52OCejJ4",h:["#0f4c5c","#1b2a66"]},
+    {t:"Showcase 3",d:"Scripting showcase recorded in Roblox Studio.",c:["Luau","Roblox"],yt:"8PyX7IuQxR0",h:["#5c1d6b","#1b2a66"]}
   ];
   var ticker=["DATASTORES","COMBAT SYSTEMS","REMOTES","OOP","MODULESCRIPTS","OPTIMIZATION","TWEENING","UI LOGIC","LUAU","HTML","JAVASCRIPT","PYTHON","C"];
 
@@ -306,12 +273,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   $("#track").innerHTML=ticker.concat(ticker).map(function(x){return"<span>"+x+"</span><span>•</span>"}).join("");
 
   $("#vgrid").innerHTML=showcases.map(function(v){
-    return '<button class="vid rv" data-yt="'+esc(v.yt)+'" data-title="'+esc(v.t)+'"><div class="thumb" style="--h1:'+v.h[0]+';--h2:'+v.h[1]+'"><span class="play"></span></div><div class="meta"><h3>'+esc(v.t)+'</h3><p>'+esc(v.d)+'</p><div class="chips">'+v.c.map(function(c){return"<span>"+esc(c)+"</span>"}).join("")+"</div></div></button>";
-  }).join("");
-
-  $("#games").innerHTML=games.map(function(g){
-    var ini=g[0].split(" ").map(function(w){return w[0]}).slice(0,2).join("");
-    return '<a class="card game rv" href="#" onclick="return false"><div class="lg">'+esc(ini)+'</div><h3>'+esc(g[0])+'</h3><small>'+esc(g[1])+'</small><div class="go mono"><span>View Roblox group</span><span>↗</span></div></a>';
+    return '<button class="vid rv" data-yt="'+esc(v.yt)+'" data-title="'+esc(v.t)+'"><div class="thumb" style="--h1:'+v.h[0]+';--h2:'+v.h[1]+'"><img src="https://i.ytimg.com/vi/'+esc(v.yt)+'/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="play"></span></div><div class="meta"><h3>'+esc(v.t)+'</h3><p>'+esc(v.d)+'</p><div class="chips">'+v.c.map(function(c){return"<span>"+esc(c)+"</span>"}).join("")+"</div></div></button>";
   }).join("");
 
   // ---- video modal ----
